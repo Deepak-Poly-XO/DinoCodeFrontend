@@ -26,7 +26,7 @@ const Nav = () => {
         <Link to="/">DINO CODE</Link>
       </div>
       <div className="links">
-        <a href="/docs">Documentation</a>
+        <Link to="/docs">Documentation</Link>
 
         <div className="dropdown">
           <a href="#" onClick={() => setShowDropdown(!showDropdown)}>Sessions</a>
