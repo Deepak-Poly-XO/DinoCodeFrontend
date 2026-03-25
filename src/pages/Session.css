@@ -1,0 +1,29 @@
+.sesId{
+  width: 10%;
+  padding: 10px;
+  margin-left: 20px;
+  font-size: 10px;
+  color: white;
+}
+.sesName{
+  margin-top: -20px;
+  width: 30%;
+  padding: 10px;
+  margin-left: 20px;
+  font-size: 10px;
+  color: white;
+}
+.data{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cpyright p{
+  font-size: 8px;
+  color: grey;
+}
+.copyright{
+  display: flex;
+  justify-content: end;
+  margin-right: 10px;
+}

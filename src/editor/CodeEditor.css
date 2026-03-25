@@ -1,0 +1,16 @@
+.editor{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20em;
+  border: 1px solid white;
+  margin-top: 2em;
+  padding: 10px;
+}
+
+
+.monaco{
+  height: 20em;
+  margin-top: 2em;
+}
