@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from '../homeNavbar/Nav';
 import './CreateSession.css';
@@ -36,7 +36,7 @@ const CreateSession = () => {
       const data = await response.json();
       navigate(`/session/${data.id}`);
 
-    } catch (err) {
+    } catch  {
       setError("Could not connect to server. Is the backend running?");
     } finally {
       setLoading(false);

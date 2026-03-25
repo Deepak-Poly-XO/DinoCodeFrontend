@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "./authServices";
 import './Auth.css';
@@ -21,7 +21,7 @@ const Login = () => {
             setError("");
             await login(email, password);
             navigate("/"); // redirect to home after login
-        } catch (err) {
+        } catch {
             setError("Invalid email or password.");
         } finally {
             setLoading(false);
@@ -56,7 +56,7 @@ const Login = () => {
                 {error && <p className="auth-error">{error}</p>}
 
                 <p className="auth-switch">
-                    Don't have an account? <Link to="/register">Register</Link>
+                    Don&apos;t have an account? <Link to="/register">Register</Link>
                 </p>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import MonacoEditor from "@monaco-editor/react";
@@ -76,7 +76,7 @@ const CodeEditor = () => {
           fontSize: "13px",
           marginBottom: "4px"
         }}>
-          ⚠️ Not connected — changes won't sync until reconnected.
+          ⚠️ Not connected — changes won&apos;t sync until reconnected.
         </div>
       )}
 
