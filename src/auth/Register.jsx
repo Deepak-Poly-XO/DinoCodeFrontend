@@ -1,14 +1,25 @@
-import  { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { register } from "./authServices";
-import './auth.css';
+import './Auth.css';
 
 const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [slowConnection, setSlowConnection] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        let timer;
+        if (loading) {
+            timer = setTimeout(() => setSlowConnection(true), 3000);
+        } else {
+            setSlowConnection(false);
+        }
+        return () => clearTimeout(timer);
+    }, [loading]);
 
     const handleRegister = async () => {
         if (!email.trim() || !password.trim()) {
@@ -20,7 +31,7 @@ const Register = () => {
             setLoading(true);
             setError("");
             await register(email, password);
-            navigate("/login"); // redirect to login after success
+            navigate("/login");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -50,8 +61,15 @@ const Register = () => {
                 />
 
                 <button onClick={handleRegister} disabled={loading}>
+                    {loading && <span className="spinner"></span>}
                     {loading ? "Creating account..." : "Register"}
                 </button>
+
+                {slowConnection && (
+                    <p className="slow-message">
+                        Server is a lil problem child , almost there...
+                    </p>
+                )}
 
                 {error && <p className="auth-error">{error}</p>}
 

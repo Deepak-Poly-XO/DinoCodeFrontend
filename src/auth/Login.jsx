@@ -1,14 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "./authServices";
-import './auth.css';
+import './Auth.css';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [slowConnection, setSlowConnection] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        let timer;
+        if (loading) {
+            timer = setTimeout(() => setSlowConnection(true), 3000);
+        } else {
+            setSlowConnection(false);
+        }
+        return () => clearTimeout(timer);
+    }, [loading]);
 
     const handleLogin = async () => {
         if (!email.trim() || !password.trim()) {
@@ -20,7 +31,7 @@ const Login = () => {
             setLoading(true);
             setError("");
             await login(email, password);
-            navigate("/"); // redirect to home after login
+            navigate("/");
         } catch {
             setError("Invalid email or password.");
         } finally {
@@ -50,8 +61,15 @@ const Login = () => {
                 />
 
                 <button onClick={handleLogin} disabled={loading}>
+                    {loading && <span className="spinner"></span>}
                     {loading ? "Logging in..." : "Login"}
                 </button>
+
+                {slowConnection && (
+                    <p className="slow-message">
+                        Server is a lil problem child , almost there...
+                    </p>
+                )}
 
                 {error && <p className="auth-error">{error}</p>}
 
