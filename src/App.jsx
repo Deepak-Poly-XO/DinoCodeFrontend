@@ -7,6 +7,7 @@ import Documentation from './docs/Documentation';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ProtectedRoute from './auth/ProtectedRoute';
+import MySessions from './pages/MySessions';
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SessionPage from "./pages/SessionPage";
@@ -35,6 +36,11 @@ function App() {
         <Route path="/session/:id" element={
           <ProtectedRoute>
             <SessionPage />
+          </ProtectedRoute>
+        }/>
+        <Route path="/mysessions" element={
+          <ProtectedRoute>
+            <MySessions />
           </ProtectedRoute>
         }/>
       </Routes>

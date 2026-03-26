@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import CodeEditor from "../editor/CodeEditor";
+import PresencePanel from "../editor/PresencePanel";
 import Nav from '../homeNavbar/Nav';
 import { getToken } from '../auth/authServices';
 import './Session.css';
@@ -11,6 +12,7 @@ function SessionPage() {
   const [sessionName, setSessionName] = useState("");
   const [copied, setCopied] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [presenceEvents, setPresenceEvents] = useState([]);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/sessions`, {
@@ -29,6 +31,13 @@ function SessionPage() {
       })
       .catch((error) => console.error("Error fetching sessions:", error));
   }, [id]);
+
+  const handlePresenceEvent = (event) => {
+    setPresenceEvents(prev => [...prev, {
+      ...event,
+      timestamp: Date.now()
+    }]);
+  };
 
   const copyId = () => {
     navigator.clipboard.writeText(id);
@@ -59,8 +68,9 @@ function SessionPage() {
         </div>
       </div>
 
-      <div className="editor-wrapper">
-        <CodeEditor />
+      <div className="session-content">
+        <CodeEditor onPresenceEvent={handlePresenceEvent} />
+        <PresencePanel events={presenceEvents} />
       </div>
 
       <div className="session-footer">
@@ -74,20 +84,14 @@ function SessionPage() {
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <p className="modal-title">leave session?</p>
             <p className="modal-sub">
-              Are you sure you want to leave{" "}
+              your code will not be saved. are you sure you want to leave{" "}
               <span className="modal-session-name">{sessionName}</span>?
             </p>
             <div className="modal-actions">
-              <button
-                className="modal-cancel"
-                onClick={() => setShowLeaveModal(false)}
-              >
+              <button className="modal-cancel" onClick={() => setShowLeaveModal(false)}>
                 stay
               </button>
-              <button
-                className="modal-confirm"
-                onClick={() => navigate("/")}
-              >
+              <button className="modal-confirm" onClick={() => navigate("/")}>
                 leave session
               </button>
             </div>

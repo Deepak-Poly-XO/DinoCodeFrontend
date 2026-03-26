@@ -34,6 +34,7 @@ const Nav = () => {
             <div className="dropdown-menu">
               <button onClick={createSession}>Create Session</button>
               <button onClick={joinSession}>Join Session</button>
+              <button onClick={() => navigate("/mysessions")}>My Sessions</button>
             </div>
           )}
         </div>

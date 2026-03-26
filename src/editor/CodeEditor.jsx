@@ -1,40 +1,96 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import MonacoEditor from "@monaco-editor/react";
+import { getToken } from "../auth/authServices";
 import './CodeEditor.css';
+import PropTypes from 'prop-types';
 
-const CodeEditor = () => {
+const CodeEditor = ({ onPresenceEvent }) => {
   const { id } = useParams();
-  const WS_URL = `${import.meta.env.VITE_WS_URL}/ws/${id}`;
-  const [code, setCode] = useState("// Start Coding...");
+  const [code, setCode] = useState("// loading...");
   const [output, setOutput] = useState("");
+  const [saveStatus, setSaveStatus] = useState("saved");
+  const debounceTimer = useRef(null);
+
+  // Extract username from JWT
+  const getUsername = () => {
+    const token = getToken();
+    if (!token) return "anonymous";
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const email = payload.sub || "";
+      return email.split('@')[0];
+    } catch {
+      return "anonymous";
+    }
+  };
+
+  const username = getUsername();
+  const WS_URL = `${import.meta.env.VITE_WS_URL}/ws/${id}?user=${username}`;
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(WS_URL, {
     shouldReconnect: () => true,
   });
 
-  // Connection status label
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: { label: "● Connecting...", color: "#f0a500" },
-    [ReadyState.OPEN]:       { label: "● Connected",     color: "#4caf50" },
-    [ReadyState.CLOSING]:    { label: "● Closing...",    color: "#f0a500" },
-    [ReadyState.CLOSED]:     { label: "● Disconnected — retrying...", color: "#f44336" },
-    [ReadyState.UNINSTANTIATED]: { label: "● Not started", color: "#888" },
-  }[readyState];
+  // Load saved code when component mounts
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/sessions/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${getToken()}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.code) setCode(data.code);
+      })
+      .catch(err => console.error("Failed to load session code:", err));
+  }, [id]);
 
   // Receive updates from other users
   useEffect(() => {
     if (lastMessage !== null) {
-      setCode(lastMessage.data);
+      try {
+        const parsed = JSON.parse(lastMessage.data);
+        if (parsed.type === "CODE") {
+          setCode(parsed.content);
+        } else if (parsed.type === "JOIN" || parsed.type === "LEAVE") {
+          if (onPresenceEvent) onPresenceEvent(parsed);
+        }
+      } catch {
+        setCode(lastMessage.data);
+      }
     }
   }, [lastMessage]);
+
+  // Auto-save with debounce
+  const saveCode = (newCode) => {
+    setSaveStatus("unsaved");
+
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/sessions/${id}/code`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${getToken()}`
+        },
+        body: JSON.stringify({ code: newCode })
+      })
+        .then(() => setSaveStatus("saved"))
+        .catch(() => setSaveStatus("error"));
+    }, 3000);
+  };
 
   const handleEditorChange = (newValue) => {
     setCode(newValue);
     if (readyState === ReadyState.OPEN) {
       sendMessage(newValue);
     }
+    saveCode(newValue);
   };
 
   const runCode = () => {
@@ -53,21 +109,44 @@ const CodeEditor = () => {
     }
   };
 
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: { label: "● Connecting...", color: "#f0a500" },
+    [ReadyState.OPEN]:       { label: "● Connected",     color: "#4caf50" },
+    [ReadyState.CLOSING]:    { label: "● Closing...",    color: "#f0a500" },
+    [ReadyState.CLOSED]:     { label: "● Disconnected — retrying...", color: "#f44336" },
+    [ReadyState.UNINSTANTIATED]: { label: "● Not started", color: "#888" },
+  }[readyState];
+
+  const saveColor = {
+    saved: "#4caf50",
+    unsaved: "#f0a500",
+    error: "#f44336"
+  }[saveStatus];
+
+  const saveLabel = {
+    saved: "● saved",
+    unsaved: "● saving...",
+    error: "● save failed"
+  }[saveStatus];
+
   return (
     <div className="editor">
-
-      {/* Connection status bar */}
       <div style={{
         padding: "4px 12px",
         fontSize: "12px",
         background: "#1a1a1a",
-        color: connectionStatus.color,
+        display: "flex",
+        justifyContent: "space-between",
         marginBottom: "4px"
       }}>
-        {connectionStatus.label}
+        <span style={{ color: connectionStatus.color }}>
+          {connectionStatus.label}
+        </span>
+        <span style={{ color: saveColor }}>
+          {saveLabel}
+        </span>
       </div>
 
-      {/* Editor disabled overlay when not connected */}
       {readyState !== ReadyState.OPEN && (
         <div style={{
           background: "#2a1a1a",
@@ -76,7 +155,7 @@ const CodeEditor = () => {
           fontSize: "13px",
           marginBottom: "4px"
         }}>
-          ⚠️ Not connected — changes won&apos;t sync until reconnected.
+          Not connected — changes won&apost sync until reconnected.
         </div>
       )}
 
@@ -124,4 +203,7 @@ const CodeEditor = () => {
   );
 };
 
+CodeEditor.propTypes = {
+  onPresenceEvent: PropTypes.func
+};
 export default CodeEditor;
