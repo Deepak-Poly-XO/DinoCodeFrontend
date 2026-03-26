@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Phudu:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-
- 
-.container{
+.container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 5em);
+  height: calc(100vh - 64px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -22,21 +20,183 @@
   height: 100%;
   object-fit: cover;
 }
-.container .title{
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.55) 50%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+}
+
+.hero {
   position: relative;
-  z-index: 1;
-  color: white;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-  width: 50%;
+  gap: 1.5rem;
+  animation: fadeUp 0.8s ease both;
 }
 
-.container .title h1{
-  font-family: "Phudu", serif;
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.container .title p{
-  font-size: 30px;
+.hero-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  animation: fadeUp 0.8s ease 0.1s both;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2ea043;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin: 0;
+  animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.accent {
+  color: #2ea043;
+}
+
+.hero-sub {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+  animation: fadeUp 0.8s ease 0.3s both;
+}
+
+.hero-code {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px 24px;
+  animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.code-line {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.875rem;
+}
+
+.code-keyword { color: #c792ea; }
+.code-var     { color: #82aaff; }
+.code-op      { color: rgba(255,255,255,0.4); }
+.code-fn      { color: #82b1ff; }
+.code-bracket { color: rgba(255,255,255,0.6); }
+.code-string  { color: #c3e88d; }
+
+.cursor {
+  color: #2ea043;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  animation: fadeUp 0.8s ease 0.5s both;
+}
+
+.btn-primary {
+  background: #2ea043;
+  color: white;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #2d9140;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+
+@media (max-width: 768px) {
+  .hero-code {
+    display: none;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 2rem;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    text-align: center;
+  }
 }
