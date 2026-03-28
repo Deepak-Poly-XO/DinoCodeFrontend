@@ -1,10 +1,383 @@
-.mainInfo{
-  width: 80%;
-  margin-left: 9em;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── Root ── */
+.docs-root {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+/* ── Layout ── */
+.docs-layout {
   display: flex;
-  justify-content: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  gap: 4rem;
+}
+
+/* ── Sidebar ── */
+.docs-sidebar {
+  width: 180px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 5rem;
+  height: fit-content;
+}
+
+.docs-sidebar-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 12px;
+}
+
+.docs-nav {
+  display: flex;
   flex-direction: column;
-  border: 1px solid white;
-  padding: 30px;
-  margin-bottom: 20px;
+  gap: 2px;
+}
+
+.docs-nav-item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.docs-nav-item:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.docs-nav-item.active {
+  color: #2ea043;
+  border-left-color: #2ea043;
+  background: rgba(46, 160, 67, 0.06);
+}
+
+.docs-sidebar-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.docs-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2ea043;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Main ── */
+.docs-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Hero ── */
+.docs-hero {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.docs-hero-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: #2ea043;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.docs-hero-title {
+  font-size: 3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 10px;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.docs-hero-sub {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ── Sections ── */
+.docs-section {
+  margin-bottom: 4rem;
+  scroll-margin-top: 6rem;
+}
+
+.docs-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  letter-spacing: -0.3px;
+}
+
+.docs-p {
+  font-size: 0.925rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.8;
+  margin: 0 0 1rem;
+  font-weight: 300;
+}
+
+/* ── Callout ── */
+.docs-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(46, 160, 67, 0.06);
+  border: 1px solid rgba(46, 160, 67, 0.15);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 1.5rem;
+}
+
+.docs-callout-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.docs-callout p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Features grid ── */
+.docs-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.docs-feature-card {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 20px;
+  transition: border-color 0.2s ease;
+}
+
+.docs-feature-card:hover {
+  border-color: rgba(46, 160, 67, 0.2);
+}
+
+.docs-feature-icon {
+  font-size: 20px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.docs-feature-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 6px;
+}
+
+.docs-feature-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ── Steps ── */
+.docs-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1.5rem;
+}
+
+.docs-step {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+}
+
+.docs-step:last-child {
+  border-bottom: none;
+}
+
+.docs-step-number {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: #2ea043;
+  background: rgba(46, 160, 67, 0.08);
+  border: 1px solid rgba(46, 160, 67, 0.15);
+  border-radius: 6px;
+  padding: 4px 8px;
+  height: fit-content;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.docs-step-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 6px;
+}
+
+.docs-step-desc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ── FAQs ── */
+.docs-faqs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 1.5rem;
+}
+
+.docs-faq {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.docs-faq.open {
+  border-color: rgba(46, 160, 67, 0.2);
+}
+
+.docs-faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111111;
+  border: none;
+  padding: 16px 20px;
+  text-align: left;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  gap: 16px;
+}
+
+.docs-faq-q:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.docs-faq-chevron {
+  font-size: 1.2rem;
+  color: #2ea043;
+  flex-shrink: 0;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.docs-faq-a {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 14px 20px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.75;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-weight: 300;
+}
+
+/* ── Footer ── */
+.docs-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.docs-footer-dot {
+  color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .docs-layout {
+    flex-direction: column;
+    padding: 2rem 1.25rem;
+    gap: 2rem;
+  }
+
+  .docs-sidebar {
+    width: 100%;
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .docs-sidebar-label { display: none; }
+  .docs-sidebar-badge { margin-top: 0; }
+
+  .docs-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .docs-nav-item {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 4px 8px;
+  }
+
+  .docs-nav-item.active {
+    border-left: none;
+    border-bottom-color: #2ea043;
+  }
+
+  .docs-hero-title { font-size: 2rem; }
+  .docs-features-grid { grid-template-columns: 1fr; }
 }
